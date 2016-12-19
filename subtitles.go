@@ -16,6 +16,31 @@ var (
 	ErrNoSubtitlesToWrite = errors.New("No subtitles to write")
 )
 
+// OSOpen allows testing functions using it
+var OSOpen = func(name string) (*os.File, error) {
+	return os.Open(name)
+}
+
+// Open opens a subtitle file
+func Open(name string) (s *Subtitles, err error) {
+	// Open the file
+	var f *os.File
+	if f, err = OSOpen(name); err != nil {
+		return
+	}
+	defer f.Close()
+
+	// Parse the content
+	if strings.HasSuffix(name, ".vtt") {
+		//s, err = FromReaderVTT(f)
+	} else if strings.HasSuffix(name, ".srt") {
+		s, err = FromReaderSRT(f)
+	} else {
+		err = errors.New("Invalid extension")
+	}
+	return
+}
+
 // Subtitles represents an ordered list of subtitles
 type Subtitles []*Subtitle
 
@@ -104,38 +129,13 @@ func (s *Subtitles) Fragment(f time.Duration) {
 	}
 }
 
-// OSOpen allows testing functions using it
-var OSOpen = func(name string) (*os.File, error) {
-	return os.Open(name)
-}
-
-// Open opens a subtitle file
-func Open(name string) (s *Subtitles, err error) {
-	// Open the file
-	var f *os.File
-	if f, err = OSOpen(name); err != nil {
-		return
-	}
-	defer f.Close()
-
-	// Parse the content
-	if strings.HasSuffix(name, ".vtt") {
-		//s, err = FromReaderVTT(f)
-	} else if strings.HasSuffix(name, ".srt") {
-		s, err = FromReaderSRT(f)
-	} else {
-		err = errors.New("Invalid extension")
-	}
-	return
-}
-
 // OSCreate allows testing functions using it
 var OSCreate = func(name string) (*os.File, error) {
 	return os.Create(name)
 }
 
 // Write writes subtitles to a file
-func Write(s *Subtitles, name string) (err error) {
+func (s *Subtitles) Write(name string) (err error) {
 	// Create the file
 	var f *os.File
 	if f, err = OSCreate(name); err != nil {
@@ -145,7 +145,7 @@ func Write(s *Subtitles, name string) (err error) {
 
 	// Write the content
 	if strings.HasSuffix(name, ".srt") {
-		err = ToWriterSRT(*s, f)
+		err = (*s).ToWriterSRT(f)
 	} else {
 		err = errors.New("Invalid extension")
 	}

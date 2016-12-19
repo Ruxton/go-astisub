@@ -80,7 +80,7 @@ func TestSRT(t *testing.T) {
 	t.Run("ToWriter", func(t *testing.T) {
 		// No subtitles
 		var w = &bytes.Buffer{}
-		err = subtitles.ToWriterSRT(subtitles.Subtitles{}, w)
+		err = subtitles.Subtitles{}.ToWriterSRT(w)
 		assert.EqualError(t, err, subtitles.ErrNoSubtitlesToWrite.Error())
 
 		// Get example file content
@@ -89,7 +89,7 @@ func TestSRT(t *testing.T) {
 		assert.NoError(t, err)
 
 		// Test
-		err = subtitles.ToWriterSRT(*s, w)
+		err = (*s).ToWriterSRT(w)
 		assert.NoError(t, err)
 		assert.Equal(t, string(c), w.String())
 	})

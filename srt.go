@@ -157,12 +157,12 @@ func FormatDurationSRT(i time.Duration) (s string) {
 }
 
 // ToWriterSRT formats subtitles as .srt format into a writer
-func ToWriterSRT(i Subtitles, o io.Writer) (err error) {
+func (s Subtitles) ToWriterSRT(o io.Writer) (err error) {
 	// Init
 	var c []byte
 
 	// Do not write anything if no subtitles
-	if len(i) == 0 {
+	if len(s) == 0 {
 		err = ErrNoSubtitlesToWrite
 		return
 	}
@@ -171,7 +171,7 @@ func ToWriterSRT(i Subtitles, o io.Writer) (err error) {
 	c = append(c, BytesBOM...)
 
 	// Loop through subtitles
-	for k, v := range i {
+	for k, v := range s {
 		// Init content
 		c = append(c, []byte(strconv.Itoa(k+1))...)
 		c = append(c, BytesLineSeparator...)
