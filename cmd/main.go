@@ -49,7 +49,7 @@ func main() {
 		}
 
 		// Output the content
-		if err = subtitles.ToWriterSRT(*s, w); err != nil {
+		if err = (*s).ToWriterSRT(w); err != nil {
 			log.Fatal(err)
 		}
 	}
