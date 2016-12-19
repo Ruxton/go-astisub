@@ -135,7 +135,7 @@ var OSCreate = func(name string) (*os.File, error) {
 }
 
 // Write writes subtitles to a file
-func (s *Subtitles) Write(name string) (err error) {
+func (s Subtitles) Write(name string) (err error) {
 	// Create the file
 	var f *os.File
 	if f, err = OSCreate(name); err != nil {
@@ -145,7 +145,7 @@ func (s *Subtitles) Write(name string) (err error) {
 
 	// Write the content
 	if strings.HasSuffix(name, ".srt") {
-		err = (*s).ToWriterSRT(f)
+		err = s.ToWriterSRT(f)
 	} else {
 		err = errors.New("Invalid extension")
 	}
