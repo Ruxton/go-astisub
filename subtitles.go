@@ -32,7 +32,7 @@ func Open(name string) (s *Subtitles, err error) {
 
 	// Parse the content
 	if strings.HasSuffix(name, ".vtt") {
-		//s, err = FromReaderVTT(f)
+		s, err = FromReaderVTT(f)
 	} else if strings.HasSuffix(name, ".srt") {
 		s, err = FromReaderSRT(f)
 	} else {
