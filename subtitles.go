@@ -44,6 +44,11 @@ func Open(name string) (s *Subtitles, err error) {
 // Subtitles represents an ordered list of subtitles
 type Subtitles []*Subtitle
 
+// Duration returns the subtitles duration
+func (s Subtitles) Duration() time.Duration {
+	return s[len(s)-1].EndAt
+}
+
 // Subtitle represents a text to show between 2 time boundaries
 type Subtitle struct {
 	EndAt   time.Duration
@@ -62,7 +67,7 @@ func (s *Subtitles) Add(d time.Duration) {
 // SimulateDuration makes sure the last item is at least ending at the requested duration
 func (s *Subtitles) SimulateDuration(d time.Duration) {
 	// Last item is already after requested duration
-	if len(*s) > 0 && (*s)[len(*s)-1].EndAt >= d {
+	if len(*s) > 0 && s.Duration() >= d {
 		return
 	}
 
