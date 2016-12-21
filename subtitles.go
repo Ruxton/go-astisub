@@ -46,6 +46,9 @@ type Subtitles []*Subtitle
 
 // Duration returns the subtitles duration
 func (s Subtitles) Duration() time.Duration {
+	if len(s) == 0 {
+		return time.Duration(0)
+	}
 	return s[len(s)-1].EndAt
 }
 
@@ -66,8 +69,8 @@ func (s *Subtitles) Add(d time.Duration) {
 
 // SimulateDuration makes sure the last item is at least ending at the requested duration
 func (s *Subtitles) SimulateDuration(d time.Duration) {
-	// Last item is already after requested duration
-	if len(*s) > 0 && s.Duration() >= d {
+	// Subtitles duration is bigger than requested duration
+	if s.Duration() >= d {
 		return
 	}
 

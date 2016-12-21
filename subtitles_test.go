@@ -9,6 +9,7 @@ import (
 )
 
 func TestSubtitles_Duration(t *testing.T) {
+	assert.Equal(t, time.Duration(0), subtitles.Subtitles{}.Duration())
 	assert.Equal(t, 7*time.Second, subtitles.Subtitles{&subtitles.Subtitle{EndAt: 3 * time.Second, StartAt: time.Second}, &subtitles.Subtitle{EndAt: 7 * time.Second, StartAt: 3 * time.Second}}.Duration())
 }
 
