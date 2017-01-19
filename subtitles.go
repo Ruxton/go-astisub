@@ -13,6 +13,7 @@ var (
 	bytesComma            = []byte(",")
 	BytesLineSeparator    = []byte("\n")
 	bytesPeriod           = []byte(".")
+	ErrInvalidExtension   = errors.New("Invalid extension")
 	ErrNoSubtitlesToWrite = errors.New("No subtitles to write")
 )
 
@@ -36,7 +37,7 @@ func Open(name string) (s *Subtitles, err error) {
 	} else if strings.HasSuffix(name, ".srt") {
 		s, err = FromReaderSRT(f)
 	} else {
-		err = errors.New("Invalid extension")
+		err = ErrInvalidExtension
 	}
 	return
 }
@@ -155,7 +156,7 @@ func (s Subtitles) Write(name string) (err error) {
 	if strings.HasSuffix(name, ".srt") {
 		err = s.ToWriterSRT(f)
 	} else {
-		err = errors.New("Invalid extension")
+		err = ErrInvalidExtension
 	}
 	return
 }
