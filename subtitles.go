@@ -143,6 +143,28 @@ func (s *Subtitles) Fragment(f time.Duration) {
 	}
 }
 
+// Merge merges subtitles i into subtitles s
+func (s *Subtitles) Merge(i Subtitles) {
+	// Loop through input subtitles
+	for _, subInput := range i {
+		var lastIndex int
+		var inserted bool
+		// Loop through parent subtitles
+		for index, subParent := range *s {
+			// Input sub is after parent sub
+			if subInput.StartAt < subParent.StartAt {
+				*s = append((*s)[:lastIndex+1], append([]*Subtitle{subInput}, (*s)[lastIndex+1:]...)...)
+				inserted = true
+				break
+			}
+			lastIndex = index
+		}
+		if !inserted {
+			*s = append(*s, subInput)
+		}
+	}
+}
+
 // OSCreate allows testing functions using it
 var OSCreate = func(name string) (*os.File, error) {
 	return os.Create(name)
