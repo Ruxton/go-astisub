@@ -21,6 +21,11 @@ func TestSubtitles_Add(t *testing.T) {
 	assert.Equal(t, &subtitles.Subtitle{EndAt: 8 * time.Second, StartAt: 4 * time.Second}, s[1])
 }
 
+func TestSubtitles_Empty(t *testing.T) {
+	assert.True(t, subtitles.Subtitles{}.Empty())
+	assert.False(t, subtitles.Subtitles{&subtitles.Subtitle{EndAt: 3 * time.Second, StartAt: time.Second}, &subtitles.Subtitle{EndAt: 7 * time.Second, StartAt: 3 * time.Second}}.Empty())
+}
+
 func TestSubtitles_SimulateDuration(t *testing.T) {
 	var s = subtitles.Subtitles{&subtitles.Subtitle{EndAt: 3 * time.Second, StartAt: time.Second}, &subtitles.Subtitle{EndAt: 7 * time.Second, StartAt: 3 * time.Second}}
 	s.SimulateDuration(10 * time.Second)

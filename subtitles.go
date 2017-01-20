@@ -68,6 +68,11 @@ func (s *Subtitles) Add(d time.Duration) {
 	}
 }
 
+// Empty returns whether the subtitles are empty
+func (s Subtitles) Empty() bool {
+	return len(s) == 0
+}
+
 // SimulateDuration makes sure the last item is at least ending at the requested duration
 func (s *Subtitles) SimulateDuration(d time.Duration) {
 	// Subtitles duration is bigger than requested duration
