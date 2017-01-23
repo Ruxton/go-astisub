@@ -73,15 +73,37 @@ func (s Subtitles) Empty() bool {
 	return len(s) == 0
 }
 
-// SimulateDuration makes sure the last item is at least ending at the requested duration
-func (s *Subtitles) SimulateDuration(d time.Duration) {
-	// Subtitles duration is bigger than requested duration
-	if s.Duration() >= d {
+// ForceDuration updates the subtitles duration
+// If input duration is bigger, then we create a dummy item
+// If input duration is smaller, then we remove useless items and we cut the last item
+func (s *Subtitles) ForceDuration(d time.Duration) {
+	// Input duration is the same as the subtitles'one
+	if s.Duration() == d {
 		return
 	}
 
-	// Add dummy item
-	*s = append(*s, &Subtitle{EndAt: d, StartAt: d, Text: []string{"Thank you"}})
+	// Input duration is bigger than subtitles'one
+	if s.Duration() < d {
+		// Add dummy item
+		*s = append(*s, &Subtitle{EndAt: d, StartAt: d, Text: []string{"..."}})
+	} else {
+		// Find last item before input duration and update end at
+		var lastIndex = -1
+		for index, i := range *s {
+			// Start at is bigger than input duration, we've found the last item
+			if i.StartAt >= d {
+				lastIndex = index
+				break
+			} else if i.EndAt > d {
+				(*s)[index].EndAt = d
+			}
+		}
+
+		// Last index has been found
+		if lastIndex != -1 {
+			(*s) = (*s)[:lastIndex]
+		}
+	}
 }
 
 // Fragment fragments subtitles with a specific fragment duration

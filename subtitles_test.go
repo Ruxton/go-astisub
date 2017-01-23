@@ -51,11 +51,17 @@ func TestSubtitles_Merge(t *testing.T) {
 	assert.Equal(t, &subtitles.Subtitle{EndAt: 14 * time.Second, StartAt: 13 * time.Second}, s1[6])
 }
 
-func TestSubtitles_SimulateDuration(t *testing.T) {
+func TestSubtitles_ForceDuration(t *testing.T) {
 	var s = subtitles.Subtitles{&subtitles.Subtitle{EndAt: 3 * time.Second, StartAt: time.Second}, &subtitles.Subtitle{EndAt: 7 * time.Second, StartAt: 3 * time.Second}}
-	s.SimulateDuration(10 * time.Second)
+	s.ForceDuration(10 * time.Second)
 	assert.Len(t, s, 3)
 	assert.Equal(t, 10*time.Second, s[2].EndAt)
 	assert.Equal(t, 10*time.Second, s[2].StartAt)
-	assert.Equal(t, "Thank you", s[2].Text[0])
+	assert.Equal(t, "...", s[2].Text[0])
+	s[2].StartAt = 7 * time.Second
+	s[2].EndAt = 12 * time.Second
+	s.ForceDuration(10 * time.Second)
+	assert.Len(t, s, 3)
+	assert.Equal(t, 10*time.Second, s[2].EndAt)
+	assert.Equal(t, 7*time.Second, s[2].StartAt)
 }
