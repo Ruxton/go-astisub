@@ -1,14 +1,17 @@
 package subtitles
 
 import (
+	"bytes"
 	"encoding/xml"
 	"io"
+	"strconv"
 	"strings"
 	"time"
 )
 
 // TTML represents a TTML
 type TTML struct {
+	Framerate int            `xml:"frameRate,attr,omitempty"`
 	Lang      string         `xml:"lang,attr,omitempty"`
 	Regions   []TTMLRegion   `xml:"head>layout>region,omitempty"`
 	Styles    []TTMLStyle    `xml:"head>styling>style,omitempty"`
@@ -42,6 +45,7 @@ type TTMLStyle struct {
 // TTMLDuration represents a TTML duration
 type TTMLDuration struct {
 	time.Duration
+	Frames int
 }
 
 // MarshalText allows TTMLDuration to implement the TextMarshaler interface
@@ -52,6 +56,20 @@ func (t *TTMLDuration) MarshalText() (text []byte, err error) {
 
 // UnmarshalText allows TTMLDuration to implement the TextUnmarshaler interface
 func (t *TTMLDuration) UnmarshalText(text []byte) (err error) {
+	// In case ttml is using the 00:00:00:00 format
+	var items = bytes.Split(text, bytesColon)
+	if len(items) > 3 {
+		if t.Frames, err = strconv.Atoi(string(items[3])); err != nil {
+			return
+		}
+		text = items[0]
+		text = append(text, bytesColon...)
+		text = append(text, items[1]...)
+		text = append(text, bytesColon...)
+		text = append(text, items[2]...)
+		text = append(text, bytesPeriod...)
+		text = append(text, []byte("000")...)
+	}
 	t.Duration, err = ParseDurationSRT(strings.Replace(string(text), ".", ",", -1))
 	return
 }
@@ -90,10 +108,18 @@ func FromReaderTTML(i io.Reader) (o *Subtitles, err error) {
 			text = append(text, t.Sentence)
 		}
 
+		// Compute durations
+		var startAt = s.Begin.Duration
+		var endAt = s.End.Duration
+		if ttml.Framerate != 0 {
+			startAt += time.Duration(1000/ttml.Framerate*s.Begin.Frames) * time.Millisecond
+			endAt += time.Duration(1000/ttml.Framerate*s.End.Frames) * time.Millisecond
+		}
+
 		// Append subtitle
 		*o = append(*o, &Subtitle{
-			EndAt:   s.End.Duration,
-			StartAt: s.Begin.Duration,
+			EndAt:   endAt,
+			StartAt: startAt,
 			Text:    text,
 		})
 	}

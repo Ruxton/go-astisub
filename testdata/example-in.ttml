@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tt xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2006/10/ttaf1" xmlns:tt="http://www.w3.org/2006/10/ttaf1" xmlns:tts="http://www.w3.org/2006/10/ttaf1#styling" xmlns:ttp="http://www.w3.org/2006/10/ttaf1#parameter" xmlns:ttm="http://www.w3.org/2006/10/ttaf1#metadata" xml:lang="fr-FR" ttp:timeBase="smpte" ttp:frameRate="25" ttp:frameRateMultiplier="1:1" ttp:markerMode="discontinuous">
+<tt xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2006/10/ttaf1" xmlns:tt="http://www.w3.org/2006/10/ttaf1" xmlns:tts="http://www.w3.org/2006/10/ttaf1#styling" xmlns:ttp="http://www.w3.org/2006/10/ttaf1#parameter" xmlns:ttm="http://www.w3.org/2006/10/ttaf1#metadata" xml:lang="fr-FR" ttp:timeBase="smpte" ttp:frameRate="1000" ttp:frameRateMultiplier="1:1" ttp:markerMode="discontinuous">
     <head>
         <styling>
             <style xml:id="style_0" tts:fontFamily="sansSerif" tts:color="white" tts:fontStyle="normal" tts:textAlign="center" tts:origin="0% 90%" tts:extent="100% 10%"/>
@@ -33,7 +33,7 @@
                 <tt:br/>
                 <span style="style_1">in this shithole.</span>
             </p>
-            <p xml:id="sub_2" begin="00:02:31.056" end="00:02:33.225" region="region_2">
+            <p xml:id="sub_2" begin="00:02:31.056" end="00:02:33:225" region="region_2">
                 <span style="style_2">(computer playing</span>
                 <tt:br/>
                 <span style="style_1">electronic melody)</span>

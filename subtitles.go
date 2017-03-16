@@ -10,6 +10,7 @@ import (
 // Vars
 var (
 	BytesBOM              = []byte{239, 187, 191}
+	bytesColon            = []byte(":")
 	bytesComma            = []byte(",")
 	BytesLineSeparator    = []byte("\n")
 	bytesPeriod           = []byte(".")
