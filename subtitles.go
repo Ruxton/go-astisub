@@ -3,7 +3,7 @@ package subtitles
 import (
 	"errors"
 	"os"
-	"strings"
+	"path/filepath"
 	"time"
 )
 
@@ -32,11 +32,14 @@ func Open(name string) (s *Subtitles, err error) {
 	defer f.Close()
 
 	// Parse the content
-	if strings.HasSuffix(name, ".vtt") {
-		s, err = FromReaderVTT(f)
-	} else if strings.HasSuffix(name, ".srt") {
+	switch filepath.Ext(name) {
+	case ".srt":
 		s, err = FromReaderSRT(f)
-	} else {
+	case ".ttml":
+		s, err = FromReaderTTML(f)
+	case ".vtt":
+		s, err = FromReaderVTT(f)
+	default:
 		err = ErrInvalidExtension
 	}
 	return
@@ -202,9 +205,12 @@ func (s Subtitles) Write(name string) (err error) {
 	defer f.Close()
 
 	// Write the content
-	if strings.HasSuffix(name, ".srt") {
+	switch filepath.Ext(name) {
+	case ".srt":
 		err = s.ToWriterSRT(f)
-	} else {
+	case ".tml":
+		err = s.ToWriterTTML(f)
+	default:
 		err = ErrInvalidExtension
 	}
 	return

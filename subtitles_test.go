@@ -8,6 +8,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func assertSubtitles(i subtitles.Subtitles, t *testing.T) {
+	assert.Len(t, i, 6)
+	assert.Equal(t, time.Duration(101370000000), (i)[0].EndAt)
+	assert.Equal(t, time.Duration(99000000000), (i)[0].StartAt)
+	assert.Equal(t, []string{"(deep rumbling)"}, (i)[0].Text)
+	assert.Equal(t, time.Duration(153225000000), (i)[5].EndAt)
+	assert.Equal(t, time.Duration(151056000000), (i)[5].StartAt)
+	assert.Equal(t, []string{"(computer playing", "electronic melody)"}, (i)[5].Text)
+}
+
 func TestSubtitles_Add(t *testing.T) {
 	var s = subtitles.Subtitles{&subtitles.Subtitle{EndAt: 3 * time.Second, StartAt: time.Second}, &subtitles.Subtitle{EndAt: 7 * time.Second, StartAt: 3 * time.Second}}
 	s.Add(time.Second)

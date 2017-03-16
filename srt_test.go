@@ -3,23 +3,12 @@ package subtitles_test
 import (
 	"bytes"
 	"io/ioutil"
-	"os"
 	"testing"
 	"time"
 
 	"github.com/asticode/go-subtitles"
 	"github.com/stretchr/testify/assert"
 )
-
-func assertSubtitles(i subtitles.Subtitles, t *testing.T) {
-	assert.Len(t, i, 6)
-	assert.Equal(t, time.Duration(101370000000), (i)[0].EndAt)
-	assert.Equal(t, time.Duration(99000000000), (i)[0].StartAt)
-	assert.Equal(t, []string{"(deep rumbling)"}, (i)[0].Text)
-	assert.Equal(t, time.Duration(153225000000), (i)[5].EndAt)
-	assert.Equal(t, time.Duration(151056000000), (i)[5].StartAt)
-	assert.Equal(t, []string{"(computer playing", "electronic melody)"}, (i)[5].Text)
-}
 
 func TestParseDurationSRT(t *testing.T) {
 	d, err := subtitles.ParseDurationSRT("12:34:56")
@@ -60,18 +49,11 @@ func TestSRT(t *testing.T) {
 	// Init
 	var s *subtitles.Subtitles
 	var err error
-	var path = "./tests/example.srt"
+	var path = "./testdata/example.srt"
 
 	// From reader
 	t.Run("FromReader", func(t *testing.T) {
-		// Open example file
-		var file *os.File
-		file, err = os.Open(path)
-		assert.NoError(t, err)
-		defer file.Close()
-
-		// Test
-		s, err = subtitles.FromReaderSRT(file)
+		s, err = subtitles.Open(path)
 		assert.NoError(t, err)
 		assertSubtitles(*s, t)
 	})
