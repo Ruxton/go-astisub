@@ -1,4 +1,4 @@
-package subtitles_test
+package astisub_test
 
 import (
 	"bytes"
@@ -6,13 +6,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/asticode/go-subtitles"
+	astisub "github.com/asticode/go-astisub"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestTTML(t *testing.T) {
 	// Init
-	var s *subtitles.Subtitles
+	var s *astisub.Subtitles
 	var err error
 
 	// From reader
@@ -24,7 +24,7 @@ func TestTTML(t *testing.T) {
 		defer file.Close()
 
 		// Test
-		s, err = subtitles.FromReaderTTML(file)
+		s, err = astisub.FromReaderTTML(file)
 		assert.NoError(t, err)
 		assertSubtitles(*s, t)
 	})
@@ -33,8 +33,8 @@ func TestTTML(t *testing.T) {
 	t.Run("ToWriter", func(t *testing.T) {
 		// No subtitles
 		var w = &bytes.Buffer{}
-		err = subtitles.Subtitles{}.ToWriterTTML(w)
-		assert.EqualError(t, err, subtitles.ErrNoSubtitlesToWrite.Error())
+		err = astisub.Subtitles{}.ToWriterTTML(w)
+		assert.EqualError(t, err, astisub.ErrNoSubtitlesToWrite.Error())
 
 		// Get example file content
 		var c []byte

@@ -1,21 +1,21 @@
-package subtitles_test
+package astisub_test
 
 import (
 	"testing"
 
-	"github.com/asticode/go-subtitles"
+	astisub "github.com/asticode/go-astisub"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestVTT(t *testing.T) {
 	// Init
-	var s *subtitles.Subtitles
+	var s *astisub.Subtitles
 	var err error
 	var path = "./testdata/example.vtt"
 
 	// From reader
 	t.Run("FromReaderVTT", func(t *testing.T) {
-		s, err = subtitles.Open(path)
+		s, err = astisub.Open(path)
 		assert.NoError(t, err)
 		assertSubtitles(*s, t)
 	})

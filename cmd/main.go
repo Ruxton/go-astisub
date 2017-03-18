@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/asticode/go-subtitles"
+	"github.com/asticode/go-astisub"
 	"github.com/asticode/go-toolkit/flag"
 )
 
@@ -26,9 +26,9 @@ func main() {
 	switch subcommand {
 	case "add":
 		// Open file
-		var s *subtitles.Subtitles
+		var s *astisub.Subtitles
 		var err error
-		if s, err = subtitles.Open(*inputPath); err != nil {
+		if s, err = astisub.Open(*inputPath); err != nil {
 			log.Fatal(err)
 		}
 
