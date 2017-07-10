@@ -7,23 +7,35 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestColor(t *testing.T) {
+	c, err := newColorFromString("305419896", 10)
+	assert.NoError(t, err)
+	assert.Equal(t, Color{Alpha: 0x12, Blue: 0x34, Green: 0x56, Red: 0x78}, *c)
+	c, err = newColorFromString("12345678", 16)
+	assert.NoError(t, err)
+	assert.Equal(t, Color{Alpha: 0x12, Blue: 0x34, Green: 0x56, Red: 0x78}, *c)
+}
+
 func TestParseDuration(t *testing.T) {
-	d, err := parseDuration("12:34:56,1234", ",")
+	d, err := parseDuration("12:34:56,1234", ",", 3)
 	assert.EqualError(t, err, "Invalid number of millisecond digits detected in 12:34:56,1234")
-	d, err = parseDuration("12,123", ",")
+	d, err = parseDuration("12,123", ",", 3)
 	assert.EqualError(t, err, "No hours, minutes or seconds detected in 12,123")
-	d, err = parseDuration("12:34,123", ",")
+	d, err = parseDuration("12:34,123", ",", 3)
 	assert.NoError(t, err)
 	assert.Equal(t, 12*time.Minute+34*time.Second+123*time.Millisecond, d)
-	d, err = parseDuration("12:34:56,123", ",")
+	d, err = parseDuration("12:34:56,123", ",", 3)
 	assert.NoError(t, err)
 	assert.Equal(t, 12*time.Hour+34*time.Minute+56*time.Second+123*time.Millisecond, d)
-	d, err = parseDuration("12:34:56,1", ",")
+	d, err = parseDuration("12:34:56,1", ",", 3)
 	assert.NoError(t, err)
 	assert.Equal(t, 12*time.Hour+34*time.Minute+56*time.Second+100*time.Millisecond, d)
-	d, err = parseDuration("12:34:56.123", ".")
+	d, err = parseDuration("12:34:56.123", ".", 3)
 	assert.NoError(t, err)
 	assert.Equal(t, 12*time.Hour+34*time.Minute+56*time.Second+123*time.Millisecond, d)
+	d, err = parseDuration("1:23:45.67", ".", 2)
+	assert.NoError(t, err)
+	assert.Equal(t, time.Hour+23*time.Minute+45*time.Second+67*time.Millisecond, d)
 }
 
 func TestFormatDuration(t *testing.T) {

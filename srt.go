@@ -22,7 +22,7 @@ var (
 
 // parseDurationSRT parses an .srt duration
 func parseDurationSRT(i string) (time.Duration, error) {
-	return parseDuration(i, ",")
+	return parseDuration(i, ",", 3)
 }
 
 // ReadFromSRT parses an .srt content
